@@ -1,0 +1,125 @@
+{% extends "MainPage.html" %}
+
+{% block content %}
+
+<section class="container py-5">
+
+    <div class="row justify-content-center mb-4">
+        <div class="col-lg-8 text-center">
+            <h2 class="fw-bold" style="color:#166534;">
+                All coins overview
+            </h2>
+            <p class="text-muted mb-0">
+                Quick dashboard with the latest market-cap and daily movement
+                for every cryptocurrency stored in your database.
+            </p>
+        </div>
+    </div>
+
+    <!-- search филтер за симболи -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-lg-6">
+            <input type="text"
+                   id="coin-filter"
+                   class="form-control"
+                   placeholder="Filter coins by symbol...">
+        </div>
+    </div>
+
+    <!-- grid од мали dashboards -->
+    <div class="row" id="coins-grid">
+        {% for c in coin_cards %}
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4 coin-card-wrapper">
+            <a href="{{ url_for('coinCrypto') }}?symbol={{ c.symbol }}"
+               class="text-decoration-none text-dark">
+                <div class="card border-0 shadow-sm h-100"
+                     style="border-radius:1.25rem; background-color:#ecfdf5;">
+                    <div class="card-body d-flex flex-column justify-content-between">
+
+                        <!-- горен ред: симбол + икона -->
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="fw-bold mb-0 coin-symbol" style="color:#166534;">
+                                {{ c.symbol }}
+                            </h5>
+
+                            {% if c.direction == 'up' %}
+                                <span class="badge rounded-pill bg-success">
+                                    ▲
+                                </span>
+                            {% elif c.direction == 'down' %}
+                                <span class="badge rounded-pill bg-danger">
+                                    ▼
+                                </span>
+                            {% else %}
+                                <span class="badge rounded-pill bg-secondary">
+                                    →
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <!-- средина: бројки -->
+                        <div class="mb-2">
+                            <small class="text-muted">Last market cap</small><br>
+                            <span class="fw-semibold">
+                                {{ "%.2f"|format(c.last_cap) }}
+                            </span>
+                        </div>
+
+                        <div class="mb-2">
+                            <small class="text-muted">Change vs previous day</small><br>
+                            {% if c.change_percent is not none %}
+                                {% if c.change_percent > 0 %}
+                                    <span class="text-success">
+                                        +{{ "%.2f"|format(c.change_percent) }} %
+                                    </span>
+                                {% elif c.change_percent < 0 %}
+                                    <span class="text-danger">
+                                        {{ "%.2f"|format(c.change_percent) }} %
+                                    </span>
+                                {% else %}
+                                    <span class="text-muted">
+                                        0.00 %
+                                    </span>
+                                {% endif %}
+                            {% else %}
+                                <span class="text-muted">N/A</span>
+                            {% endif %}
+                        </div>
+
+                        <!-- долу: датум -->
+                        <div class="mt-auto">
+                            <small class="text-muted">
+                                Last update: {{ c.last_date }}
+                            </small>
+                        </div>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+</section>
+
+<!-- Мал JS за филтрирање на картички според симбол -->
+<script>
+(function () {
+    const input = document.getElementById('coin-filter');
+    const grid = document.getElementById('coins-grid');
+    if (!input || !grid) return;
+
+    input.addEventListener('input', function () {
+        const q = this.value.toLowerCase();
+        const cards = grid.querySelectorAll('.coin-card-wrapper');
+
+        cards.forEach(card => {
+            const symEl = card.querySelector('.coin-symbol');
+            const text = symEl ? symEl.textContent.toLowerCase() : '';
+            card.style.display = text.includes(q) ? '' : 'none';
+        });
+    });
+})();
+</script>
+
+{% endblock %}

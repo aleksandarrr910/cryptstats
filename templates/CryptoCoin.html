@@ -1,0 +1,114 @@
+{% extends "MainPage.html" %}
+
+{% block content %}
+
+<section class="container py-5">
+
+    <div class="row justify-content-center mb-4">
+        <div class="col-lg-8 text-center">
+            <h2 class="fw-bold" style="color:#166534;">
+                {{ symbol }} – yearly closing overview
+            </h2>
+            <p class="text-muted mb-0">
+                Year–by–year value, computed from the market data stored in your database.
+            </p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10" style="height:420px;">
+            <div class="card border-0 shadow-sm h-100" style="border-radius:1.25rem;">
+                <div class="card-body" style="background-color:#ecfdf5;">
+                    <canvas id="coin-year-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+(function () {
+    const canvas = document.getElementById('coin-year-chart');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+
+    // Ги земаме податоците од Jinja како JSON
+    const rawData = {{ chart_rows | tojson }};
+    // Претвораме во две посебни низи за Chart.js
+    const labels = rawData.map(point => String(point.year));
+    const values = rawData.map(point => point.close ?? 0);
+
+    const config = {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: '{{ symbol }} value per year',
+                data: values,
+                borderWidth: 2,
+                borderColor: 'rgba(22, 163, 74, 1)',
+                backgroundColor: 'rgba(74, 222, 128, 0.25)',
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                pointBackgroundColor: 'rgba(22, 163, 74, 1)',
+                tension: 0.25,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        color: '#14532d',
+                        font: { weight: '500' }
+                    }
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Year',
+                        color: '#166534'
+                    },
+                    ticks: {
+                        color: '#166534'
+                    },
+                    grid: {
+                        color: 'rgba(187, 247, 208, 1)'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Value',
+                        color: '#166534'
+                    },
+                    ticks: {
+                        color: '#166534'
+                    },
+                    grid: {
+                        color: 'rgba(209, 250, 229, 1)'
+                    }
+                }
+            }
+        }
+    };
+
+    new Chart(ctx, config);
+})();
+</script>
+
+{% endblock %}

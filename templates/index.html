@@ -1,0 +1,37 @@
+{% extends "MainPage.html" %}
+
+{% block content %}
+
+<!-- HERO SECTION (full screen) -->
+<section class="vh-100 d-flex flex-column justify-content-center align-items-center text-white"
+         style="background: linear-gradient(135deg, #0b3d91, #1a5fcc);">
+    <div class="text-center px-3 px-md-5">
+        <h1 class="display-3 fw-bold mb-3">Welcome to Crypto Dashboard</h1>
+        <p class="lead mb-4 fs-5">
+            Track historical crypto prices fetched in real-time from Binance.<br>
+            Explore interactive charts, trends, and market activity.
+        </p>
+        <a href="/fetch-data" class="btn btn-warning btn-lg fw-semibold px-5 shadow">
+            Fetch Data
+        </a>
+    </div>
+</section>
+
+<!-- COINS SECTION -->
+<section class="container my-5 py-5">
+    <h2 id="coins-section" class="mb-4 text-primary fw-bold text-center">Select a Coin</h2>
+
+    <form action="/coin" method="get" class="mx-auto" style="max-width: 500px;">
+        <div class="input-group shadow-sm rounded overflow-hidden">
+            <select name="symbol" class="form-select border-0" required>
+                <option value="" disabled selected>Select a coin...</option>
+                {% for symbol in symbols %}
+                    <option value="{{ symbol }}">{{ symbol }}</option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-primary fw-bold" type="submit">Go</button>
+        </div>
+    </form>
+</section>
+
+{% endblock %}

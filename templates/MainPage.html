@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptStats Monitor</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+    <!-- Custom styles -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body class="bg-light text-dark">
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container">
+
+            <!-- Brand -->
+            <a class="navbar-brand fw-semibold" href="{{ url_for('Home') }}">
+                CryptStats
+            </a>
+
+            <!-- Mobile toggler -->
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#mainNav"
+                    aria-controls="mainNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Nav + Search -->
+            <div class="collapse navbar-collapse" id="mainNav">
+
+                <!-- Left side links -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'Home' %}active{% endif %}"
+                           href="{{ url_for('Home') }}">
+                            Home
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'compare_coins' %}active{% endif %}"
+                           href="{{ url_for('compare_coins') }}">
+                            Compare
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'stats_overview' %}active{% endif %}"
+                           href="{{ url_for('stats_overview') }}">
+                            Statistics
+                        </a>
+                    </li>
+
+                    <!-- ако имаш /coins_overview рута, остави вака -->
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'coins_overview' %}active{% endif %}"
+                           href="{{ url_for('coins_overview') }}">
+                            Coins
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Right side search form -->
+                <form class="d-flex" method="get" action="{{ url_for('coinCrypto') }}">
+                    <input class="form-control me-2"
+                           type="search"
+                           name="symbol"
+                           placeholder="Search coin (e.g. BTC)"
+                           aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">
+                        Search
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="container-fluid p-0">
+    {% block content %}
+    {% endblock %}
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+</html>

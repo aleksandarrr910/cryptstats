@@ -1,0 +1,74 @@
+{% extends "MainPage.html" %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+<section class="min-vh-75 d-flex align-items-center"
+         style="background: radial-gradient(circle at top left, #bbf7d0, #22c55e);">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <div class="card border-0 shadow-lg"
+                     style="background:rgba(255,255,255,0.92); border-radius:1.5rem;">
+                    <div class="card-body p-5 text-center">
+
+                        <span class="badge mb-3 px-3 py-2"
+                              style="background-color:#dcfce7; color:#166534;">
+                            Live crypto data from Binance
+                        </span>
+
+                        <h1 class="display-4 fw-bold mb-3" style="color:#065f46;">
+                            Welcome to <span style="color:#16a34a;">CryptStats</span>
+                        </h1>
+
+                        <p class="lead mb-3" style="color:#14532d;">
+                            Track price history, daily changes and overall market
+                            movement in a clean, green-themed dashboard.
+                        </p>
+
+                        <p class="mb-4" style="color:#166534;">
+                            Start by fetching the latest market data and then explore
+                            per-coin charts, comparisons and detailed statistics.
+                        </p>
+
+                        <a href="/fetch-data"
+                           class="btn btn-lg fw-semibold px-5"
+                           style="background-color:#16a34a; border:none; color:white;">
+                            Fetch Latest Data
+                        </a>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- COINS SECTION -->
+<section class="container my-5 py-4">
+    <h2 id="coins-section"
+        class="mb-4 fw-bold text-center"
+        style="color:#166534;">
+        Choose a coin to inspect
+    </h2>
+
+    <form action="/coin" method="get" class="mx-auto" style="max-width: 480px;">
+        <div class="input-group shadow-sm rounded overflow-hidden">
+            <select name="symbol" class="form-select border-0" required>
+                <option value="" disabled selected>Select a coin...</option>
+                {% for symbol in symbols %}
+                    <option value="{{ symbol }}">{{ symbol }}</option>
+                {% endfor %}
+            </select>
+            <button class="btn fw-bold"
+                    type="submit"
+                    style="background-color:#16a34a; border:none; color:white;">
+                Go
+            </button>
+        </div>
+    </form>
+</section>
+
+{% endblock %}
